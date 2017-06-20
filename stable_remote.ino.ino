@@ -41,6 +41,7 @@ int throttle=1100;
 
  float rolloffset;
  float pitchoffset;
+ float yawoffset;
 void  wifi_setup();
  
 void setup(){   esp8266.begin(9600);
@@ -71,6 +72,7 @@ myservo[3].attach(7);
     pid_last_yaw_d_error = 0;
     pid_pitch_setpoint=0;
     pid_roll_setpoint=0;
+    pid_yaw_setpoint=180;
             myservo[0].writeMicroseconds(1000);
             myservo[1].writeMicroseconds(1000);
             myservo[3].writeMicroseconds(1000);
@@ -86,6 +88,7 @@ myservo[3].attach(7);
   mySensor.readEul();
  rolloffset=-mySensor.euler.y;
  pitchoffset=-mySensor.euler.z;
+ yawoffset=mySensor.euler.x-180;
  wifi_setup();
  
 }
@@ -97,13 +100,9 @@ int del=10;
  String readString="";
 void loop(){
  if (esp8266.available()) {
-  unsigned long start = micros();
-// Call to your function
+
 receiver();
-// Compute the time it took
-unsigned long end = micros();
-unsigned long delta = end - start;
-Serial.println(delta);
+
 
  }
  
@@ -115,8 +114,10 @@ Serial.println(delta);
 
     mySensor.readEul();
      gyro_pitch_input=mySensor.euler.z+pitchoffset;
-      gyro_roll_input=mySensor.euler.y+ rolloffset;
+     gyro_roll_input=mySensor.euler.y+ rolloffset;
+     gyro_yaw_input=mySensor.euler.x-yawoffset;
 
+ 
  
     calculate_pid();
       
@@ -321,8 +322,8 @@ while (esp8266.available()  )     {
   }
       if( num.toInt()>=1000 && num.toInt()<=2000){
       int n=num.toInt();
-      Serial.print(response[0]);
-        Serial.println(n); 
+//      Serial.print(response[0]);
+//        Serial.println(n); 
         if(response[0]=='t'){
           throttle=n;
            }
