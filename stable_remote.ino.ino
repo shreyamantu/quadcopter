@@ -88,7 +88,8 @@ myservo[3].attach(7);
   mySensor.readEul();
  rolloffset=-mySensor.euler.y;
  pitchoffset=-mySensor.euler.z;
- yawoffset=mySensor.euler.x-180;
+ yawoffset=0;
+ 
  wifi_setup();
  
 }
@@ -115,9 +116,12 @@ receiver();
     mySensor.readEul();
      gyro_pitch_input=mySensor.euler.z+pitchoffset;
      gyro_roll_input=mySensor.euler.y+ rolloffset;
+     if(mySensor.euler.x<=180)
      gyro_yaw_input=mySensor.euler.x-yawoffset;
-
- 
+     else
+     gyro_yaw_input=mySensor.euler.x-360-yawoffset;
+     
+ Serial.println(gyro_yaw_input);
  
     calculate_pid();
       
