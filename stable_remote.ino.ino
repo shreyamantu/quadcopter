@@ -331,7 +331,7 @@ while (esp8266.available()  )     {
 
 
   void wifi_setup(){
-     esp8266.begin(9600);
+     esp8266.begin(9600);//this to enter 
  
 Serial.print("setting up server\r\n");
 
@@ -341,7 +341,7 @@ sendData("AT+CWDHCP=0,0\r\n",2000);
 
 sendData("AT+CIPMUX=1\r\n",2000);
 sendData("AT+CIPSERVER=1,21\r\n",2000);
-sendData("AT+CIPAP=\"192.168.5.152\"\r\n",2000);
+sendData("AT+CIPAP=\"192.168.5.152\"\r\n",2000); // this 
   //sendData("AT+CIPSTART=\"TCP\",\"192.168.5.203\",21\r\n",2000);
   }
   
